@@ -1,0 +1,27 @@
+/* .landing-page {
+ 
+  height: 100vh;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #DBD0C5; /* fallback fill */
+
+
+
+.landing-page {
+  position: relative;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.landing-page::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("../assets/hero-bg.png") center top / contain no-repeat;
+  background-color: #DBD0C5;
+  filter: blur(4px);   /* adjust strength */
+  transform: scale(1.1);
+  z-index: -1;
+  opacity: 0.9; 
+}
