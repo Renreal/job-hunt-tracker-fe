@@ -11,29 +11,69 @@
   background-color: aliceblue;
   display: flex;
   flex-direction: row;
-  gap: 1rem;
-  justify-content: end;
-  padding: 2rem;
+  padding: 0.5rem;
+  align-items: center;
+  justify-content: space-between;
+  position: fixed;
+  width: 100%;
+  z-index: 3;
+}
+.login-signup-bar img {
+  width: clamp(70px, 70px + 2vw, 75px);
+  height: auto;
+}
+.login-signup-btn {
+  display: flex;
+  gap: 0.5rem;
   align-items: center;
 }
 
 .login-signup-bar span {
   font-weight: bold;
+  cursor: default;
 }
 
 .sign-up {
   background-color: #474444;
   color: aliceblue;
   padding: 0.5rem 1rem;
-  border-radius: 15px; 
+  border-radius: 15px;
   margin-right: 1rem;
 }
 
 .content {
   position: absolute;
   z-index: 30;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 1.5rem;
 }
 
+.content h1 {
+  font-size: clamp(2rem, 1rem + 3vw, 7rem);
+  color: rgba(255, 255, 255, 255);
+  max-width: 1180px;
+}
+.content h2 {
+  font-size: clamp(14px, 1rem + 1.5vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.8);
+  max-width: 820px;
+}
+.try-btn {
+  color: rgba(255, 255, 255, 0.8);
+  background-color: #0c0b0b;
+  font-weight: bold;
+  width: fit-content;
+  padding: 0.8rem 2rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in;
+}
+.try-btn:hover {
+  background-color: #0c0b0ba8;
+}
 .hero-image-container {
   background: url(/src/assets/hero.png) no-repeat center;
   background-size: cover;
