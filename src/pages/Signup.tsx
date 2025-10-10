@@ -1,14 +1,14 @@
-import { LoginForm } from "@/components/login-form"
-function Login() {
+import { SignupForm } from "@/components/signup-form"
+function Signup() {
   return(
 
     <div className="bg-muted flex min-h-svh flex-col items-center justify-center p-6 md:p-10">
       <div className="w-full max-w-sm md:max-w-4xl">
-        <LoginForm />
+        <SignupForm />
       </div>
     </div>
 
   )
 }
 
-export default Login
+export default Signup;
