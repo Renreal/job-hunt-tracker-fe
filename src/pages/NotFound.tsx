@@ -13,7 +13,7 @@ function NotFound() {
       Hmm… we can’t seem to find that page 😅
       </p>
       <a
-        href="/"
+        href="/home"
         className="px-6 py-3 bg-black text-white rounded-lg hover:bg-gray-800 transition"
       >
         Back to Home
