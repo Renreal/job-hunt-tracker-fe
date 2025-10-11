@@ -10,16 +10,16 @@ function Landing() {
           <img src={Logo} alt="Logo" />
         </div>
         <div className="login-signup-btn">
-          <span className="login">LOG IN</span>
-          <span className="sign-up">SIGN UP</span>
+          <a className="login" href="/login">LOG IN</a>
+          <a className="sign-up" href="/signup">SIGN UP</a>
         </div>
       </div>
 
       <div className="hero-image-container"></div>
 
       <div className="content">
-        <h1>ORGANIZE. TRACK. GET HIRED.</h1>
-        <h2>
+        <h1 className="text-5xl font-bold">ORGANIZE. TRACK. GET HIRED.</h1>
+        <h2 className="text-gray-500 mb-4 mt-4 text-sm">
           Stay on top of your job search with Job Hunt Tracker. Your free tool
           to manage applications, monitor progress, and land your next
           opportunity with confidence
