@@ -24,7 +24,7 @@ function Landing() {
           to manage applications, monitor progress, and land your next
           opportunity with confidence
         </h2>
-        <Link to="/login" className="try-btn">
+        <Link to="/home" className="try-btn">
           TRY IT NOW
         </Link>
       </div>

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import Hero from "../assets/hero.png";
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-
+import { handleGoogleLogin } from "@/services/thirdPartyAuth";
 export function LoginForm({
   className,
   ...props
@@ -35,14 +35,6 @@ export function LoginForm({
       window.location.href = "/home";
     }
   };
-
-  // google login
-  const handleGoogleLogin = async () => {
-  await supabase.auth.signInWithOAuth({
-    provider: "google",
-    options: { redirectTo: window.location.origin + "/home" },
-  });
-};
 
 
 
