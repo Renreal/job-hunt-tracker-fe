@@ -1,20 +1,24 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from "react"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react"
 import { supabase } from "../lib/supabaseClient"
-
-type SessionType = Awaited<ReturnType<typeof supabase.auth.getSession>>["data"]["session"]
-type UserType = SessionType extends { user: infer U } ? U : null
+import type { Session, User } from "@supabase/supabase-js"
 
 interface AuthContextType {
-  user: UserType
-  session: SessionType
+  user: User | null
+  session: Session | null
   loading: boolean
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<UserType>(null)
-  const [session, setSession] = useState<SessionType>(null)
+  const [user, setUser] = useState<User | null>(null)
+  const [session, setSession] = useState<Session | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
