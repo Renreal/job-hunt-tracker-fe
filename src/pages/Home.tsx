@@ -1,8 +1,8 @@
-import React from 'react'
-
+import Dashboard from "./page"
 function Home() {
   return (
-    <div>Welcome!</div>
+    
+    <Dashboard/>
   )
 }
 

@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "./supabaseClient";
 const handleGoogleLogin = async () => {
   await supabase.auth.signInWithOAuth({
     provider: "google",

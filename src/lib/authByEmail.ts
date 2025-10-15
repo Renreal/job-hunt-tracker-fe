@@ -1,4 +1,4 @@
-import { supabase } from "../lib/supabaseClient";
+import { supabase } from "./supabaseClient";
 
 export const handleSignup = async (
   name: string,

@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import Hero from "../assets/hero.png";
 import { useState } from "react";
 import { supabase } from "../lib/supabaseClient";
-import { handleGoogleLogin } from "@/services/thirdPartyAuth";
+import { handleGoogleLogin } from "@/lib/thirdPartyAuth";
 export function LoginForm({
   className,
   ...props

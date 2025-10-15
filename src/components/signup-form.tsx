@@ -4,9 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Hero from "../assets/hero.png";
-import { handleGoogleLogin } from "@/services/thirdPartyAuth";
+import { handleGoogleLogin } from "@/lib/thirdPartyAuth";
 import { useState } from "react";
-import { handleSignup } from "@/services/authByEmail";
+import { handleSignup } from "@/lib/authByEmail";
 
 export function SignupForm({
   className,
