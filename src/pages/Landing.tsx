@@ -10,8 +10,8 @@ function Landing() {
           <img src={Logo} alt="Logo" />
         </div>
         <div className="login-signup-btn">
-          <a className="login" href="/login">LOG IN</a>
-          <a className="sign-up" href="/signup">SIGN UP</a>
+          <Link to ="/login"className="login">LOG IN</Link>
+          <Link to ="/signup"className="sign-up">SIGN UP</Link>
         </div>
       </div>
 
