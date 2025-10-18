@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Check, ChevronRight } from "lucide-react";
-
+import { useDashboard } from "../context/DashboardContext";
 import {
   Collapsible,
   CollapsibleContent,
@@ -24,17 +24,17 @@ export function Calendars({
     items: string[];
   }[];
 }) {
-  // 🧠 State to track selected items
-  const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
+    const { selectedItems, toggleItem } = useDashboard();
 
-  // 🕹️ Toggle item selection
-  const toggleItem = (item: string) => {
-    setSelectedItems((prev) =>
-      prev.includes(item)
-        ? prev.filter((i) => i !== item)
-        : [...prev, item]
-    );
-  };
+  // const [selectedItems, setSelectedItems] = React.useState<string[]>([]);
+
+  // const toggleItem = (item: string) => {
+  //   setSelectedItems((prev) =>
+  //     prev.includes(item)
+  //       ? prev.filter((i) => i !== item)
+  //       : [...prev, item]
+  //   );
+  // };
 
   return (
     <>
