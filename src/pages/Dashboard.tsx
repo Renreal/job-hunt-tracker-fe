@@ -33,7 +33,7 @@ function LandingDashboard() {
          <PendingApplications/>
         <JobOffers/>  */}
           <Table>
-            <TableCaption>A list of your recent invoices.</TableCaption>
+            <TableCaption>List of your applications.</TableCaption>
             <TableHeader>
               <TableRow>
                 <TableHead className="w-[100px]">Invoice</TableHead>

@@ -1,5 +1,3 @@
-import React from 'react'
-
 function PendingApplications() {
   return (
     <div>PendingApplications</div>
