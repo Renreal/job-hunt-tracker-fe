@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { MoreHorizontalIcon } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,42 +23,46 @@ import {
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+
+
+interface UserData {
+  company: string;
+  location: string;
+  platform: string;
+  position: string;
+  status: string;
+  date: string;
+}
 
 export function ButtonGroupView({ user }: { user: UserData }) {
-  const [showNewDialog, setShowNewDialog] = useState(false);
-  const [showShareDialog, setShowShareDialog] = useState(false);
+  const [showViewDialog, setShowViewDialog] = useState(false);
+  const [showEditDialog, setShowEditDialog] = useState(false);
 
-  const [data, setData] = useState<UserData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const formatDate = (isoString: string) => {
-    return new Intl.DateTimeFormat("en-US", {
+  const formatDate = (isoString: string) =>
+    new Intl.DateTimeFormat("en-US", {
       year: "numeric",
       month: "long",
       day: "numeric",
       hour: "numeric",
       minute: "2-digit",
-      hour12: true, // shows AM/PM
+      hour12: true,
     }).format(new Date(isoString));
-  };
 
   return (
     <>
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <Button variant="outline" aria-label="Open menu" size="icon-sm">
+          <Button variant="outline" aria-label="Open menu" size="icon">
             <MoreHorizontalIcon />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-40" align="end">
-          <DropdownMenuLabel>File Actions</DropdownMenuLabel>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <DropdownMenuGroup>
-            <DropdownMenuItem onSelect={() => setShowNewDialog(true)}>
+            <DropdownMenuItem onSelect={() => setShowViewDialog(true)}>
               View
             </DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => setShowShareDialog(true)}>
+            <DropdownMenuItem onSelect={() => setShowEditDialog(true)}>
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem>Delete</DropdownMenuItem>
@@ -67,60 +70,56 @@ export function ButtonGroupView({ user }: { user: UserData }) {
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
+      {/* View dialog */}
+      <Dialog open={showViewDialog} onOpenChange={setShowViewDialog}>
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>
               {user.company} | {user.position}
-              <br />
-              <p className="text-xs"> Applied via {user.platform} </p> <br />
+              <p className="text-xs mt-1">Applied via {user.platform}</p>
             </DialogTitle>
-
-            <DialogDescription>
-             <p className="text-base font-bold">
-                {user.location} - Status: {user.status}
-              </p> 
-              {formatDate(user.date)}
-              <br />
-              
+            <DialogDescription className="mt-3">
+              <p className="text-base font-bold">
+                {user.location} — Status: {user.status}
+              </p>
+              <p className="text-sm text-muted-foreground mt-2">
+                {formatDate(user.date)}
+              </p>
             </DialogDescription>
           </DialogHeader>
         </DialogContent>
       </Dialog>
 
-      <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
+      {/* Edit dialog */}
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Share File</DialogTitle>
+            <DialogTitle>Edit Application</DialogTitle>
             <DialogDescription>
-              Anyone with the link will be able to view this file.
+              Update details for <strong>{user.company}</strong>.
             </DialogDescription>
           </DialogHeader>
+
           <FieldGroup className="py-3">
             <Field>
-              <Label htmlFor="email">Email Address</Label>
-              <Input
-                id="email"
-                name="email"
-                type="email"
-                placeholder="shadcn@vercel.com"
-                autoComplete="off"
-              />
+              <Label htmlFor="position">Position</Label>
+              <Input id="position" defaultValue={user.position} />
             </Field>
             <Field>
-              <FieldLabel htmlFor="message">Message (Optional)</FieldLabel>
-              <Textarea
-                id="message"
-                name="message"
-                placeholder="Check out this file"
-              />
+              <FieldLabel htmlFor="status">Status</FieldLabel>
+              <Input id="status" defaultValue={user.status} />
+            </Field>
+            <Field>
+              <FieldLabel htmlFor="platform">Platform</FieldLabel>
+              <Input id="platform" defaultValue={user.platform} />
             </Field>
           </FieldGroup>
+
           <DialogFooter>
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button type="submit">Send Invite</Button>
+            <Button type="submit">Save Changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
