@@ -21,6 +21,7 @@ interface UserData {
   platform: string;
   position: string;
   status: string;
+  date: string;
 }
 
 function LandingDashboard() {
