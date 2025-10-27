@@ -29,7 +29,7 @@ function LandingDashboard() {
         // console.log("Access token:", sessionData.session?.access_token);
 
         const result = await getUserData();
-        console.log("API response:", result);
+        // console.log("API response:", result);
 
         if (result.error) {
           setError(result.error);
