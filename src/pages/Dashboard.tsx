@@ -2,6 +2,8 @@ import { useDashboard } from "../context/DashboardContext";
 import Interviews from "./Interviews";
 import PendingApplications from "./PendingApplications";
 import JobOffers from "./JobOffers";
+import { getUserData } from "../api/getUserData";
+import { useEffect, useState } from "react";
 
 import {
   Table,
@@ -16,44 +18,67 @@ import {
 function LandingDashboard() {
   const { selectedItems } = useDashboard();
 
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    (async () => {
+      try {
+        // const { data: sessionData } = await supabase.auth.getSession();
+        // console.log("Access token:", sessionData.session?.access_token);
+
+        const result = await getUserData();
+        console.log("API response:", result);
+
+        if (result.error) {
+          setError(result.error);
+        } else {
+          setData(result);
+        }
+      } catch (err) {
+        console.error("Error fetching user data:", err);
+        setError("Failed to load data");
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (!data.length) return <p>No user data found.</p>;
+
   return (
     <div>
       {selectedItems.includes("Interviews") && <Interviews />}
-      {selectedItems.includes("Pending Applications") && (
-        <PendingApplications />
-      )}
+      {selectedItems.includes("Pending Applications") && <PendingApplications />}
       {selectedItems.includes("Job offers") && <JobOffers />}
 
       {selectedItems.length === 0 && (
-        // <p className="text-muted-foreground">
-        //   Select a calendar item to view details.
-        // </p>
         <div>
-          {/* <Interviews/>
-         <PendingApplications/>
-        <JobOffers/>  */}
           <Table>
             <TableCaption>List of your applications.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Invoice</TableHead>
+                <TableHead className="w-[100px]">Company</TableHead>
+                <TableHead>Location</TableHead>
+                <TableHead>Platform</TableHead>
+                <TableHead>Title</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Method</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
               </TableRow>
             </TableHeader>
+
             <TableBody>
-              <TableRow>
-                <TableCell className="font-medium">INV001</TableCell>
-                <TableCell>Paid</TableCell>
-                <TableCell>Credit Card</TableCell>
-                <TableCell className="text-right">$250.00</TableCell>
-              </TableRow><TableRow>
-                <TableCell className="font-medium">INV001</TableCell>
-                <TableCell>Paid</TableCell>
-                <TableCell>Credit Card</TableCell>
-                <TableCell className="text-right">$250.00</TableCell>
-              </TableRow>
+              {data.map((d, index) => (
+                <TableRow key={index}>
+                  <TableCell>{d.company}</TableCell>
+                  <TableCell>{d.location}</TableCell>
+                  <TableCell>{d.platform}</TableCell>
+                  <TableCell>{d.position}</TableCell>
+                  <TableCell>{d.status}</TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </div>
