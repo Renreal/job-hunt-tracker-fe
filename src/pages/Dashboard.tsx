@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
+import { ButtonGroupDemo } from "./ButtonGroupDemo";
 
 interface UserData {
   company: string;
@@ -79,9 +80,14 @@ function LandingDashboard() {
                   <TableCell>{d.platform}</TableCell>
                   <TableCell>{d.position}</TableCell>
                   <TableCell>{d.status}</TableCell>
+                  <TableCell className="text-right font-bold">
+                    <ButtonGroupDemo />
+                  </TableCell>
+
                 </TableRow>
               ))}
             </TableBody>
+
           </Table>
         </div>
       )}
