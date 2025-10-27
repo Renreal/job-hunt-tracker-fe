@@ -1,9 +1,9 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { MoreHorizontalIcon } from "lucide-react"
+import { useState } from "react";
+import { MoreHorizontalIcon } from "lucide-react";
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -12,7 +12,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,15 +20,30 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Textarea } from "@/components/ui/textarea"
+} from "@/components/ui/dropdown-menu";
+import { Field, FieldGroup, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
-export function ButtonGroupDemo() {
-  const [showNewDialog, setShowNewDialog] = useState(false)
-  const [showShareDialog, setShowShareDialog] = useState(false)
+export function ButtonGroupView({ user }: { user: UserData }) {
+  const [showNewDialog, setShowNewDialog] = useState(false);
+  const [showShareDialog, setShowShareDialog] = useState(false);
+
+  const [data, setData] = useState<UserData[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const formatDate = (isoString: string) => {
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true, // shows AM/PM
+    }).format(new Date(isoString));
+  };
 
   return (
     <>
@@ -42,38 +57,37 @@ export function ButtonGroupDemo() {
           <DropdownMenuLabel>File Actions</DropdownMenuLabel>
           <DropdownMenuGroup>
             <DropdownMenuItem onSelect={() => setShowNewDialog(true)}>
-              New File...
+              View
             </DropdownMenuItem>
             <DropdownMenuItem onSelect={() => setShowShareDialog(true)}>
-              Share...
+              Edit
             </DropdownMenuItem>
-            <DropdownMenuItem disabled>Download</DropdownMenuItem>
+            <DropdownMenuItem>Delete</DropdownMenuItem>
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
+
       <Dialog open={showNewDialog} onOpenChange={setShowNewDialog}>
-        <DialogContent className="sm:max-w-[425px]">
+        <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
-            <DialogTitle>Create New File</DialogTitle>
+            <DialogTitle>
+              {user.company} | {user.position}
+              <br />
+              <p className="text-xs"> Applied via {user.platform} </p> <br />
+            </DialogTitle>
+
             <DialogDescription>
-              Provide a name for your new file. Click create when you&apos;re
-              done.
+             <p className="text-base font-bold">
+                {user.location} - Status: {user.status}
+              </p> 
+              {formatDate(user.date)}
+              <br />
+              
             </DialogDescription>
           </DialogHeader>
-          <FieldGroup className="pb-3">
-            <Field>
-              <FieldLabel htmlFor="filename">File Name</FieldLabel>
-              <Input id="filename" name="filename" placeholder="document.txt" />
-            </Field>
-          </FieldGroup>
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
-            </DialogClose>
-            <Button type="submit">Create</Button>
-          </DialogFooter>
         </DialogContent>
       </Dialog>
+
       <Dialog open={showShareDialog} onOpenChange={setShowShareDialog}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
@@ -111,5 +125,5 @@ export function ButtonGroupDemo() {
         </DialogContent>
       </Dialog>
     </>
-  )
+  );
 }

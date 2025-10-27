@@ -13,7 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "../components/ui/table";
-import { ButtonGroupDemo } from "./ButtonGroupDemo";
+import { ButtonGroupView } from "./ButtonGroupView";
 
 interface UserData {
   company: string;
@@ -64,7 +64,7 @@ function LandingDashboard() {
             <TableCaption>List of your applications.</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[100px]">Company</TableHead>
+                <TableHead>Company</TableHead>
                 <TableHead>Location</TableHead>
                 <TableHead>Platform</TableHead>
                 <TableHead>Title</TableHead>
@@ -81,7 +81,7 @@ function LandingDashboard() {
                   <TableCell>{d.position}</TableCell>
                   <TableCell>{d.status}</TableCell>
                   <TableCell className="text-right font-bold">
-                    <ButtonGroupDemo />
+                   <ButtonGroupView user={d} />
                   </TableCell>
 
                 </TableRow>
