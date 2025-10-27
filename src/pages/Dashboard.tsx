@@ -4,7 +4,6 @@ import PendingApplications from "./PendingApplications";
 import JobOffers from "./JobOffers";
 import { getUserData } from "../api/getUserData";
 import { useEffect, useState } from "react";
-
 import {
   Table,
   TableBody,
@@ -15,22 +14,25 @@ import {
   TableRow,
 } from "../components/ui/table";
 
+interface UserData {
+  company: string;
+  location: string;
+  platform: string;
+  position: string;
+  status: string;
+}
+
 function LandingDashboard() {
   const { selectedItems } = useDashboard();
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<UserData[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
       try {
-        // const { data: sessionData } = await supabase.auth.getSession();
-        // console.log("Access token:", sessionData.session?.access_token);
-
         const result = await getUserData();
-        // console.log("API response:", result);
-
         if (result.error) {
           setError(result.error);
         } else {
