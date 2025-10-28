@@ -1,9 +1,10 @@
 import { useDashboard } from "../context/DashboardContext";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import Interviews from "./Interviews";
 import PendingApplications from "./PendingApplications";
 import JobOffers from "./JobOffers";
+import { useQuery } from "@tanstack/react-query";
 import { getUserData } from "../api/getUserData";
-import { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -27,36 +28,33 @@ interface UserData {
 function LandingDashboard() {
   const { selectedItems } = useDashboard();
 
-  const [data, setData] = useState<UserData[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const { data, isLoading, isError, error } = useQuery<UserData[]>({
+    queryKey: ["userData"], // cache key
+    queryFn: getUserData,
+    staleTime: 1000 * 60 * 5, // cache for 5 minutes
+    retry: 2, // retry twice if failed
+  });
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const result = await getUserData();
-        if (result.error) {
-          setError(result.error);
-        } else {
-          setData(result);
-        }
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-        setError("Failed to load data");
-      } finally {
-        setLoading(false);
-      }
-    })();
-  }, []);
+  if (isLoading)
+    return (
+      <DotLottieReact
+        src="/loading.lottie"
+        loop
+        autoplay
+        className="w-300 h-250"
+      />
+    );
+  if (isError)
+    return <p style={{ color: "red" }}>{(error as Error).message}</p>;
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!data.length) return <p>No user data found.</p>;
+  if (!data || !data.length) return <p>No user data found.</p>;
 
   return (
     <div>
       {selectedItems.includes("Interviews") && <Interviews />}
-      {selectedItems.includes("Pending Applications") && <PendingApplications />}
+      {selectedItems.includes("Pending Applications") && (
+        <PendingApplications />
+      )}
       {selectedItems.includes("Job offers") && <JobOffers />}
 
       {selectedItems.length === 0 && (
@@ -82,13 +80,11 @@ function LandingDashboard() {
                   <TableCell>{d.position}</TableCell>
                   <TableCell>{d.status}</TableCell>
                   <TableCell className="text-right font-bold">
-                   <ButtonGroupView user={d} />
+                    <ButtonGroupView user={d} />
                   </TableCell>
-
                 </TableRow>
               ))}
             </TableBody>
-
           </Table>
         </div>
       )}
