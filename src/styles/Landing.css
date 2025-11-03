@@ -31,7 +31,7 @@
 .login-signup-bar a {
   cursor: default;
 }
-.login:hover{
+.login:hover {
   color: #474444;
 }
 .sign-up {
@@ -48,17 +48,24 @@
 .content {
   position: absolute;
   z-index: 30;
-  height: 98%;
+  height: fit-content;
   display: flex;
   flex-direction: column;
   justify-content: center;
   margin: 1rem;
   align-items: center;
   align-content: center;
+  background: #0000000a;
+  backdrop-filter: blur(3px); 
+    -webkit-backdrop-filter: blur(3px); 
+  bottom: 50vh;
+  top: 50vh;
+  padding: 1rem;
+  border-radius: 12px; 
 }
 
+
 .content h1 {
-  
   color: rgba(255, 255, 255, 255);
   max-width: 1180px;
   text-align: center;
@@ -90,4 +97,17 @@
   height: 101vh;
   z-index: 2;
   float: right;
+}
+
+@media (max-width: 995px) {
+  .hero-image-container {
+    float: none;
+    width: 100%;
+  }
+}
+@media (max-height: 830px) {
+  .content {
+    top: 35vh;
+    bottom: auto;
+  }
 }
