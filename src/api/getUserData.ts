@@ -8,7 +8,9 @@ export async function getUserData() {
     return { error: "User not logged in" };
   }
 
-  const res = await fetch("https://job-hunt-tracker-api-gateway.vercel.app/users", {
+  const res =await fetch(`${import.meta.env.VITE_API_URL}/users`
+  //  await fetch("https://job-hunt-tracker-api-gateway.vercel.app/users"
+    , {
     headers: {
       Authorization: `Bearer ${token}`,
     },
