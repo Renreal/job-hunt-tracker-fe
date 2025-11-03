@@ -17,6 +17,7 @@ import {
 import { ButtonGroupView } from "./ButtonGroupView";
 
 interface UserData {
+  id: string;
   company: string;
   location: string;
   platform: string;
