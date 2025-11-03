@@ -80,15 +80,21 @@ export function ButtonGroupView({ user }: { user: UserData }) {
     });
   };
 
-  const formatDate = (isoString: string) =>
-    new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    }).format(new Date(isoString));
+ const formatDate = (isoString: string) => {
+  if (!isoString || isNaN(new Date(isoString).getTime())) {
+    return ""; 
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  }).format(new Date(isoString));
+};
+
 
   return (
     <>

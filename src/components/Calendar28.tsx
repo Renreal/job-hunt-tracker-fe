@@ -34,9 +34,10 @@ export function Calendar28({ value, onChange }: Calendar24Props) {
   // combine date and time into full ISO timestamp
   React.useEffect(() => {
     if (!date || !onChange) return;
-
+    if (!time || !/^\d{2}:\d{2}:\d{2}$/.test(time)) return;
     const [hh, mm, ss] = time.split(":").map(Number);
     const combined = new Date(date);
+    if (isNaN(combined.getTime())) return;
     combined.setHours(hh);
     combined.setMinutes(mm);
     combined.setSeconds(ss);
