@@ -1,8 +1,5 @@
 import { useDashboard } from "../context/DashboardContext";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
-import Interviews from "./Interviews";
-import PendingApplications from "./PendingApplications";
-import JobOffers from "./JobOffers";
 import { useQuery } from "@tanstack/react-query";
 import { getUserData } from "../api/getUserData";
 import {
@@ -30,10 +27,10 @@ function LandingDashboard() {
   const { selectedItems } = useDashboard();
 
   const { data, isLoading, isError, error } = useQuery<UserData[]>({
-    queryKey: ["userData"], // cache key
+    queryKey: ["userData"],
     queryFn: getUserData,
-    staleTime: 1000 * 60 * 5, // cache for 5 minutes
-    retry: 2, // retry twice if failed
+    staleTime: 1000 * 60 * 5,
+    retry: 2,
   });
 
   if (isLoading)
@@ -47,48 +44,53 @@ function LandingDashboard() {
     );
   if (isError)
     return <p style={{ color: "red" }}>{(error as Error).message}</p>;
-
   if (!data || !data.length) return <p>No user data found.</p>;
+
+  // 🧠 Filter logic
+  const filteredData =
+    selectedItems.length > 0
+      ? data.filter((item) =>
+          selectedItems.some(
+            (selected) =>
+              item.status.toLowerCase() === selected.toLowerCase()
+          )
+        )
+      : data;
 
   return (
     <div>
-      {selectedItems.includes("Interviews") && <Interviews />}
-      {selectedItems.includes("Pending Applications") && (
-        <PendingApplications />
-      )}
-      {selectedItems.includes("Job offers") && <JobOffers />}
+      <Table>
+        <TableCaption>
+          {selectedItems.length > 0
+            ? `Showing ${selectedItems.join(", ")}`
+            : "List of your applications."}
+        </TableCaption>
 
-      {selectedItems.length === 0 && (
-        <div>
-          <Table>
-            <TableCaption>List of your applications.</TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Company</TableHead>
-                <TableHead>Location</TableHead>
-                <TableHead>Platform</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Company</TableHead>
+            <TableHead>Location</TableHead>
+            <TableHead>Platform</TableHead>
+            <TableHead>Title</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
 
-            <TableBody>
-              {data.map((d, index) => (
-                <TableRow key={index}>
-                  <TableCell>{d.company}</TableCell>
-                  <TableCell>{d.location}</TableCell>
-                  <TableCell>{d.platform}</TableCell>
-                  <TableCell>{d.position}</TableCell>
-                  <TableCell>{d.status}</TableCell>
-                  <TableCell className="text-right font-bold">
-                    <ButtonGroupView user={d} />
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
-      )}
+        <TableBody>
+          {filteredData.map((d) => (
+            <TableRow key={d.id}>
+              <TableCell>{d.company}</TableCell>
+              <TableCell>{d.location}</TableCell>
+              <TableCell>{d.platform}</TableCell>
+              <TableCell>{d.position}</TableCell>
+              <TableCell>{d.status}</TableCell>
+              <TableCell className="text-right font-bold">
+                <ButtonGroupView user={d} />
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }

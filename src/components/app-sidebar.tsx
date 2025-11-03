@@ -2,6 +2,7 @@ import * as React from "react";
 import { Plus } from "lucide-react";
 
 import { Calendars } from "@/components/calendars";
+import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { DatePicker } from "@/components/date-picker";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -32,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     calendars: [
       {
         name: "My Calendars",
-        items: ["Interviews", "Pending Applications", "Job offers"],
+        items: ["Interviews", "Pending", "Job offers"],
       },
     ],
   };
@@ -50,7 +51,13 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
 
       <SidebarContent>
-        <DatePicker />
+        {/* <DatePicker /> */}
+          <DotLottieReact
+        src="/orangCat.lottie"
+        loop
+        autoplay
+        className="w-full"
+      />
         <SidebarSeparator className="mx-0" />
         <Calendars calendars={data.calendars} />
       </SidebarContent>
