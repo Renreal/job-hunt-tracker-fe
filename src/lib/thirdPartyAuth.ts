@@ -5,4 +5,10 @@ const handleGoogleLogin = async () => {
     options: { redirectTo: window.location.origin + "/home" },
   });
 };
-export { handleGoogleLogin };
+
+
+
+
+
+
+export { handleGoogleLogin};

@@ -26,6 +26,13 @@ import { Label } from "@/components/ui/label";
 import { useUpdateUser } from "@/hooks/useUpdateUser";
 import { useDeleteUser } from "@/hooks/useDeleteUser";
 import { Calendar28 } from "@/components/Calendar28";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface UserData {
   id: string;
@@ -80,21 +87,20 @@ export function ButtonGroupView({ user }: { user: UserData }) {
     });
   };
 
- const formatDate = (isoString: string) => {
-  if (!isoString || isNaN(new Date(isoString).getTime())) {
-    return ""; 
-  }
+  const formatDate = (isoString: string) => {
+    if (!isoString || isNaN(new Date(isoString).getTime())) {
+      return "";
+    }
 
-  return new Intl.DateTimeFormat("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  }).format(new Date(isoString));
-};
-
+    return new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    }).format(new Date(isoString));
+  };
 
   return (
     <>
@@ -162,13 +168,24 @@ export function ButtonGroupView({ user }: { user: UserData }) {
               />
             </Field>
             <Field>
-              <FieldLabel htmlFor="status">Status</FieldLabel>
-              <Input
-                id="status"
+              <Label htmlFor="status">Status</Label>
+              <Select
                 value={formData.status}
-                onChange={handleChange}
-              />
+                onValueChange={(value) =>
+                  setFormData((prev) => ({ ...prev, status: value }))
+                }
+              >
+                <SelectTrigger id="status" className="mt-1 w-full">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="interviews">Interview</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="job offer">Job Offer</SelectItem>
+                </SelectContent>
+              </Select>
             </Field>
+
             <Field>
               <Calendar28
                 value={formData.date}

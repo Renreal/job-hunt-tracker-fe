@@ -30,8 +30,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     },
     calendars: [
       {
-        name: "My Calendars",
-        items: ["Interviews", "Pending", "Job offer"],
+        name: "My Job Applications",
+        items: ["Interview", "Pending", "Job offer"],
       },
     ],
   };
