@@ -105,7 +105,7 @@ export function NewEntryDialog({ open, onOpenChange }: Props) {
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="interviews">Interview</SelectItem>
+                <SelectItem value="interview">Interview</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="job offer">Job Offer</SelectItem>
               </SelectContent>
