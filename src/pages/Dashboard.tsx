@@ -58,7 +58,7 @@ function LandingDashboard() {
       : data;
 
   return (
-    <div>
+    <div style={{borderTop: "0.1px solid #80808033"}}>
       <Table>
         <TableCaption>
           {selectedItems.length > 0

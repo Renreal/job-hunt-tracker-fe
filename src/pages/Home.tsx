@@ -50,11 +50,12 @@ export default function Home() {
             
           </header>
           <div className="flex flex-1 flex-col gap-4 p-4">
+           <div className="flex justify-end">
             <BreadcrumbList>
                 <BreadcrumbItem>
                   <BreadcrumbPage>
                     <InputGroup>
-                      <InputGroupInput placeholder="company name..." />
+                      <InputGroupInput placeholder="search company name..." />
                       <InputGroupAddon>
                         <Search />
                       </InputGroupAddon>
@@ -65,6 +66,7 @@ export default function Home() {
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
+          </div> 
             <LandingDashboard />
           </div>
         </SidebarInset>
