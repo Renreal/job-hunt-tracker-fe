@@ -99,6 +99,7 @@
   float: right;
 }
 
+
 @media (max-width: 995px) {
   .hero-image-container {
     float: none;
