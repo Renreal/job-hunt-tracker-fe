@@ -2,7 +2,6 @@ import { DashboardProvider } from "../context/DashboardContext";
 import { AppSidebar } from "../components/app-sidebar";
 import LandingDashboard from "./Dashboard";
 import {
-  Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
@@ -19,7 +18,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group";
 import {Search } from "lucide-react"
-
+import { useState } from "react";
 const today = new Date();
 const formattedDate = today.toLocaleDateString("en-US", {
   weekday: "short",
@@ -28,6 +27,7 @@ const formattedDate = today.toLocaleDateString("en-US", {
   day: "numeric",
 });
 export default function Home() {
+  const [search, setSearch] = useState("");
   return (
     <DashboardProvider>
       <SidebarProvider>
@@ -55,19 +55,18 @@ export default function Home() {
                 <BreadcrumbItem>
                   <BreadcrumbPage>
                     <InputGroup>
-                      <InputGroupInput placeholder="search company name..." />
+                      <InputGroupInput placeholder="search company name..."
+                      value={search}
+                      onChange={(e)=>setSearch(e.target.value)} />
                       <InputGroupAddon>
                         <Search />
-                      </InputGroupAddon>
-                      <InputGroupAddon align="inline-end">
-                        12 results
                       </InputGroupAddon>
                     </InputGroup>
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
           </div> 
-            <LandingDashboard />
+            <LandingDashboard search={search} />
           </div>
         </SidebarInset>
       </SidebarProvider>

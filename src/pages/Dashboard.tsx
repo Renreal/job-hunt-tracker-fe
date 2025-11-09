@@ -23,12 +23,16 @@ interface UserData {
   date: string;
 }
 
-function LandingDashboard() {
+interface Props{
+  search: string;
+}
+
+function LandingDashboard({search}:Props) {
   const { selectedItems } = useDashboard();
 
   const { data, isLoading, isError, error } = useQuery<UserData[]>({
-    queryKey: ["userData"],
-    queryFn: getUserData,
+    queryKey: ["userData", search],
+    queryFn: () => getUserData(search),
     staleTime: 1000 * 60 * 5,
     retry: 2,
   });
