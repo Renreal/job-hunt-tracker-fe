@@ -1,24 +1,6 @@
 import { supabase } from "./supabaseClient";
 
-export const handleSignup = async (
-  name: string,
-  email: string,
-  password: string
-) => {
-  const { data: existingUser, error: existingError } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("email", email)
-    .maybeSingle();
-
-  if (existingError) {
-    console.error("Error checking existing email:", existingError.message);
-  }
-
-  if (existingUser) {
-    return { error: "This email is already in use. Please log in instead." };
-  }
-
+export const handleSignup = async (name: string, email: string, password: string) => {
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -29,19 +11,23 @@ export const handleSignup = async (
 
   if (error) {
     console.error("Signup error:", error.message);
+
+    if (error.message.includes("rate")) {
+      return { error: "Too many signup attempts. Please try again later." };
+    }
+
     return { error: error.message };
   }
 
-  const user = data.user;
-  console.log("User signed up:", user);
-
-  if (user && !data.session) {
+  // Successful signup: user needs to confirm email
+  if (data.user && !data.session) {
     return { message: "Check your email to confirm your signup." };
   }
 
+  // If session exists (rare for signup), redirect
   if (data.session) {
     window.location.href = "/home";
   }
 
-  return { user };
+  return { user: data.user };
 };
