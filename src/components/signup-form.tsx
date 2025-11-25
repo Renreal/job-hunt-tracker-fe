@@ -24,7 +24,11 @@ const onSubmit = async (e: React.FormEvent) => {
   setLoading(false);
 
   if ("error" in result && result.error) {
-    alert(result.error);
+    if(result.error == "User already registered"){
+      alert("User already registered, try logging in instead.")
+    }else{
+      return(result.error);
+    }
   } else if ("user" in result && result.user) {
     alert("Signup successful!");
   }
