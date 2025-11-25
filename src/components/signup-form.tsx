@@ -20,14 +20,12 @@ export function SignupForm({
 const onSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
   setLoading(true);
-  const { error, message } = await handleSignup(name, email, password);
+  const result = await handleSignup(name, email, password);
   setLoading(false);
 
-  if (error) {
-    alert(error);
-  } else if (message) {
-    alert(message);
-  } else {
+  if ("error" in result && result.error) {
+    alert(result.error);
+  } else if ("user" in result && result.user) {
     alert("Signup successful!");
   }
 };

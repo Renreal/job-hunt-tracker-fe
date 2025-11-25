@@ -48,7 +48,7 @@ function LandingDashboard({search}:Props) {
     );
   if (isError)
     return <p style={{ color: "red" }}>{(error as Error).message}</p>;
-  if (!data || !data.length) return <p>No user data found.</p>;
+  if (!data || !data.length) return <p className="mx-auto flex items-center h-screen">No existing data yet? Add an entry!</p>;
 
   // 🧠 Filter logic
   const filteredData =
