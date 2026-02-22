@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -21,22 +21,46 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+
+interface InitialData {
+  company?: string;
+  location?: string;
+  position?: string;
+  short_description?: string;
+}
+
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  initialData?: InitialData;
+  closeAIDialog?: () => void; // <-- optional callback to close AI dialog
 }
 
-export function NewEntryDialog({ open, onOpenChange }: Props) {
+export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
   const [formData, setFormData] = useState({
     company: "",
     location: "",
     platform: "",
     position: "",
     status: "",
+    short_description: "",
     date: new Date().toISOString(),
   });
 
   const { mutate: createUser, isPending } = useCreateUser();
+
+  // Update formData whenever initialData changes (e.g., after AI response)
+  useEffect(() => {
+    if (initialData) {
+      setFormData((prev) => ({
+        ...prev,
+        company: initialData.company || "",
+        location: initialData.location || "",
+        position: initialData.position || "",
+        short_description: initialData.short_description || "",
+      }));
+    }
+  }, [initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -89,6 +113,14 @@ export function NewEntryDialog({ open, onOpenChange }: Props) {
             <Input
               id="position"
               value={formData.position}
+              onChange={handleChange}
+            />
+          </div>
+          <div>
+            <Label htmlFor="short_description">Job Description</Label>
+            <Input
+              id="short_description"
+              value={formData.short_description}
               onChange={handleChange}
             />
           </div>

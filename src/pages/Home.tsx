@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/input-group";
 import {Search } from "lucide-react"
 import { useState } from "react";
+import { useDebounce } from "../hooks/useDebounce";
+
 const today = new Date();
 const formattedDate = today.toLocaleDateString("en-US", {
   weekday: "short",
@@ -26,8 +28,14 @@ const formattedDate = today.toLocaleDateString("en-US", {
   month: "short",
   day: "numeric",
 });
+
+
+
+
+
 export default function Home() {
   const [search, setSearch] = useState("");
+  const debouncedSearch = useDebounce(search, 500);
   return (
     <DashboardProvider>
       <SidebarProvider>
@@ -65,8 +73,8 @@ export default function Home() {
                   </BreadcrumbPage>
                 </BreadcrumbItem>
               </BreadcrumbList>
-          </div> 
-            <LandingDashboard search={search} />
+          </div>
+            <LandingDashboard search={debouncedSearch} />
           </div>
         </SidebarInset>
       </SidebarProvider>

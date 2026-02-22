@@ -1,7 +1,5 @@
-"use client";
-
 import * as React from "react";
-import { Plus } from "lucide-react";
+import { PanelBottomOpen } from "lucide-react";
 import { DotLottieReact } from "@lottiefiles/dotlottie-react";
 import { NavUser } from "@/components/nav-user";
 import {
@@ -15,9 +13,18 @@ import {
   SidebarRail,
   SidebarSeparator,
 } from "@/components/ui/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuShortcut,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/context/AuthProvider";
 import { Calendars } from "@/components/calendars";
 import { NewEntryDialog } from "@/pages/newEntryDialog";
+import { NewEntryWithAI } from "@/pages/newEntryWithAI";
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { user, loading } = useAuth();
   const fullName = user?.user_metadata?.full_name || "Guest User";
@@ -28,7 +35,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       email: user?.email || "Loading...",
       avatar: "/avatars/shadcn.jpg",
     },
-    calendars: [
+    jobs: [
       {
         name: "My Job Applications",
         items: ["Interview", "Pending", "Job offer"],
@@ -37,6 +44,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   };
 
   const [showDialog, setShowDialog] = React.useState(false);
+  const [showAIDialog, setShowAIDialog] = React.useState(false);
 
   return (
     <>
@@ -52,17 +60,37 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         </SidebarHeader>
 
         <SidebarContent>
-          <DotLottieReact src="/orangCat.lottie" loop autoplay className="w-full" />
+          <DotLottieReact
+            src="/orangCat.lottie"
+            loop
+            autoplay
+            className="w-full"
+          />
           <SidebarSeparator className="mx-0" />
-          <Calendars calendars={data.calendars} />
+          <Calendars calendars={data.jobs} />
         </SidebarContent>
-
+        <SidebarSeparator className="mx-0" />
         <SidebarFooter>
           <SidebarMenu>
             <SidebarMenuItem>
-              <SidebarMenuButton onClick={() => setShowDialog(true)}>
-                <Plus />
-                <span>New Entry</span>
+              <SidebarMenuButton>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <div className="flex gap-1">
+                      <PanelBottomOpen />
+                      <span>New Entry</span>
+                    </div>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <DropdownMenuGroup>
+                      <DropdownMenuItem onClick={() => setShowAIDialog(true)}>With AI</DropdownMenuItem>
+                      <DropdownMenuItem onClick={() => setShowDialog(true)}>
+                        Manually
+                         <DropdownMenuShortcut>⌘+T</DropdownMenuShortcut>
+                      </DropdownMenuItem>
+                    </DropdownMenuGroup>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </SidebarMenuButton>
             </SidebarMenuItem>
           </SidebarMenu>
@@ -73,6 +101,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
       {/* Dialog Component */}
       <NewEntryDialog open={showDialog} onOpenChange={setShowDialog} />
+      <NewEntryWithAI open={showAIDialog} onOpenChange={setShowAIDialog}  />
     </>
   );
 }

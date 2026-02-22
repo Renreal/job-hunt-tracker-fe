@@ -2,6 +2,7 @@
 import penguin from "@/assets/penguin.png"
 import {
   ChevronsUpDown,
+  CloudUpload,
   LogOut,
 } from "lucide-react"
 
@@ -83,10 +84,15 @@ const onLogoutClick = async () => {
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
+            <DropdownMenuItem>
+              <CloudUpload />
+              Upload Resume
+            </DropdownMenuItem>
             <DropdownMenuItem onClick={onLogoutClick}>
               <LogOut />
               Log out
             </DropdownMenuItem>
+            
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>

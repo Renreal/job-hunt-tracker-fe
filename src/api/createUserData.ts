@@ -5,9 +5,11 @@ export interface CreateUserPayload {
   location: string;
   platform: string;
   position: string;
+  short_description: string;
   status: string;
   date: string; // ISO or YYYY-MM-DD
 }
+
 
 export async function createUserData(payload: CreateUserPayload) {
   const session = await supabase.auth.getSession();

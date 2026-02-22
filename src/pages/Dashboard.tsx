@@ -33,7 +33,7 @@ function LandingDashboard({search}:Props) {
   const { data, isLoading, isError, error } = useQuery<UserData[]>({
     queryKey: ["userData", search],
     queryFn: () => getUserData(search),
-    staleTime: 1000 * 60 * 5,
+    staleTime: 1000 * 60 * 10,
     retry: 2,
   });
 
