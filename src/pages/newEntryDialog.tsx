@@ -22,21 +22,20 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-interface InitialData {
-  company?: string;
-  location?: string;
-  position?: string;
-  short_description?: string;
-}
-
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  initialData?: InitialData;
-  closeAIDialog?: () => void; // <-- optional callback to close AI dialog
+  initialData?: {
+    company?: string;
+    location?: string;
+    position?: string;
+    short_description?: string;
+  };
 }
 
 export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
+  const { mutate: createUser, isPending } = useCreateUser();
+
   const [formData, setFormData] = useState({
     company: "",
     location: "",
@@ -47,20 +46,20 @@ export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
     date: new Date().toISOString(),
   });
 
-  const { mutate: createUser, isPending } = useCreateUser();
-
-  // Update formData whenever initialData changes (e.g., after AI response)
+  // IMPORTANT: reset form every time dialog opens
   useEffect(() => {
-    if (initialData) {
-      setFormData((prev) => ({
-        ...prev,
-        company: initialData.company || "",
-        location: initialData.location || "",
-        position: initialData.position || "",
-        short_description: initialData.short_description || "",
-      }));
+    if (open && initialData) {
+      setFormData({
+        company: initialData.company ?? "",
+        location: initialData.location ?? "",
+        platform: "",
+        position: initialData.position ?? "",
+        status: "",
+        short_description: initialData.short_description ?? "",
+        date: new Date().toISOString(),
+      });
     }
-  }, [initialData]);
+  }, [open, initialData]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -69,10 +68,9 @@ export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
 
   const handleSubmit = () => {
     createUser(formData, {
-      onSuccess: () => {
-        onOpenChange(false);
-      },
-      onError: (err: any) => alert(`Error creating entry: ${err.message}`),
+      onSuccess: () => onOpenChange(false),
+      onError: (err: any) =>
+        alert(`Error creating entry: ${err.message}`),
     });
   };
 
@@ -86,36 +84,24 @@ export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
         <div className="grid gap-4 py-3">
           <div>
             <Label htmlFor="company">Company</Label>
-            <Input
-              id="company"
-              value={formData.company}
-              onChange={handleChange}
-            />
+            <Input id="company" value={formData.company} onChange={handleChange} />
           </div>
+
           <div>
             <Label htmlFor="location">Location</Label>
-            <Input
-              id="location"
-              value={formData.location}
-              onChange={handleChange}
-            />
+            <Input id="location" value={formData.location} onChange={handleChange} />
           </div>
+
           <div>
             <Label htmlFor="platform">Platform</Label>
-            <Input
-              id="platform"
-              value={formData.platform}
-              onChange={handleChange}
-            />
+            <Input id="platform" value={formData.platform} onChange={handleChange} />
           </div>
+
           <div>
             <Label htmlFor="position">Position</Label>
-            <Input
-              id="position"
-              value={formData.position}
-              onChange={handleChange}
-            />
+            <Input id="position" value={formData.position} onChange={handleChange} />
           </div>
+
           <div>
             <Label htmlFor="short_description">Job Description</Label>
             <Input
@@ -126,14 +112,14 @@ export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
           </div>
 
           <div>
-            <Label htmlFor="status">Status</Label>
+            <Label>Status</Label>
             <Select
               onValueChange={(value) =>
                 setFormData((prev) => ({ ...prev, status: value }))
               }
               value={formData.status}
             >
-              <SelectTrigger id="status" className="mt-1 w-full">
+              <SelectTrigger className="mt-1 w-full">
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
@@ -156,6 +142,7 @@ export function NewEntryDialog({ open, onOpenChange, initialData }: Props) {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
+
           <Button onClick={handleSubmit} disabled={isPending}>
             {isPending ? "Saving..." : "Create Entry"}
           </Button>

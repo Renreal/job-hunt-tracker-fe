@@ -40,6 +40,7 @@ interface UserData {
   location: string;
   platform: string;
   position: string;
+  short_description: string;
   status: string;
   date: string;
 }
@@ -51,6 +52,7 @@ export function ButtonGroupView({ user }: { user: UserData }) {
 
   const [formData, setFormData] = useState({
     position: user.position,
+    short_description: user.short_description,
     status: user.status,
     date: user.date,
     platform: user.platform,
@@ -168,6 +170,22 @@ export function ButtonGroupView({ user }: { user: UserData }) {
               />
             </Field>
             <Field>
+              <Label htmlFor="short_description">Short Description</Label>
+              <Input
+                id="short_description"
+                value={formData.short_description}
+                onChange={handleChange}
+              />
+            </Field>
+             <Field>
+              <FieldLabel htmlFor="platform">Platform</FieldLabel>
+              <Input
+                id="platform"
+                value={formData.platform}
+                onChange={handleChange}
+              />
+            </Field>
+            <Field>
               <Label htmlFor="status">Status</Label>
               <Select
                 value={formData.status}
@@ -194,14 +212,7 @@ export function ButtonGroupView({ user }: { user: UserData }) {
                 }
               />
             </Field>
-            <Field>
-              <FieldLabel htmlFor="platform">Platform</FieldLabel>
-              <Input
-                id="platform"
-                value={formData.platform}
-                onChange={handleChange}
-              />
-            </Field>
+           
           </FieldGroup>
 
           <DialogFooter>

@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Sparkles } from "lucide-react";
@@ -13,20 +20,32 @@ interface Props {
   onOpenChange: (open: boolean) => void;
 }
 
+interface AIResponse {
+  company: string;
+  location: string;
+  job_position: string;
+  short_description: string;
+}
+
 export function NewEntryWithAI({ open, onOpenChange }: Props) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
-  const [aiResponse, setAiResponse] = useState<{ company: string; location: string; job_position: string; short_description: string } | null>(null);
+
+  const [entryData, setEntryData] = useState<AIResponse | null>(null);
   const [showDialog, setShowDialog] = useState(false);
 
   const handleSubmit = async () => {
     if (!text.trim()) return alert("Please enter a job description.");
 
     setLoading(true);
+
     try {
       const res = await fetch("http://localhost:8000/chat/", {
         method: "POST",
-        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
         body: JSON.stringify({ text }),
       });
 
@@ -34,13 +53,25 @@ export function NewEntryWithAI({ open, onOpenChange }: Props) {
 
       const data = await res.json();
 
-      setAiResponse({
-        company: data.company || "",
-        location: data.location || "",
-        job_position: data.job_position || "",
-        short_description: data.short_description || "",
-      });
+      const parsedData: AIResponse = {
+        company: data.company ?? "",
+        location: data.location ?? "",
+        job_position: data.job_position ?? "",
+        short_description: data.short_description ?? "",
+      };
 
+      // IMPORTANT: ensure we actually received something meaningful
+      if (!parsedData.company && !parsedData.job_position) {
+        throw new Error("AI returned empty response");
+      }
+
+      // Set data first
+      setEntryData(parsedData);
+
+      // Close AI dialog
+      onOpenChange(false);
+
+      // Then open new entry dialog
       setShowDialog(true);
     } catch (err: any) {
       alert(`Error: ${err.message}`);
@@ -51,17 +82,18 @@ export function NewEntryWithAI({ open, onOpenChange }: Props) {
 
   return (
     <>
+      {/* AI INPUT DIALOG */}
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader className="flex flex-row items-center gap-2">
-            <DialogTitle>Add new Entry with AI</DialogTitle> <Sparkles />
+            <DialogTitle>Add new Entry with AI</DialogTitle>
+            <Sparkles />
           </DialogHeader>
 
           <div className="grid gap-4 py-3">
             <Field>
-              <FieldLabel htmlFor="textarea-message">Feeling lazy to type?</FieldLabel>
+              <FieldLabel>Feeling lazy to type?</FieldLabel>
               <Textarea
-                id="textarea-message"
                 placeholder="Paste job description here"
                 value={text}
                 onChange={(e) => setText(e.target.value)}
@@ -73,23 +105,25 @@ export function NewEntryWithAI({ open, onOpenChange }: Props) {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
+
             <Button onClick={handleSubmit} disabled={loading}>
-              {loading ? "Processing..." : "Submit"}
+              {loading ? "Processing AI..." : "Submit"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
-      {/* NewEntryDialog pre-filled with AI response */}
-      {aiResponse && (
+      {/* IMPORTANT: Only mount when BOTH are ready */}
+      {showDialog && entryData !== null && (
         <NewEntryDialog
+          key={JSON.stringify(entryData)} // force remount every time
           open={showDialog}
           onOpenChange={setShowDialog}
           initialData={{
-            company: aiResponse.company,
-            location: aiResponse.location,
-            position: aiResponse.job_position,
-            short_description: aiResponse.short_description,
+            company: entryData.company,
+            location: entryData.location,
+            position: entryData.job_position,
+            short_description: entryData.short_description,
           }}
         />
       )}
