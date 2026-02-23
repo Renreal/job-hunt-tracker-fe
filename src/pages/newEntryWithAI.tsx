@@ -40,7 +40,7 @@ export function NewEntryWithAI({ open, onOpenChange }: Props) {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/chat/", {
+      const res = await fetch("http://localhost:8001/chat/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -60,18 +60,14 @@ export function NewEntryWithAI({ open, onOpenChange }: Props) {
         short_description: data.short_description ?? "",
       };
 
-      // IMPORTANT: ensure we actually received something meaningful
       if (!parsedData.company && !parsedData.job_position) {
         throw new Error("AI returned empty response");
       }
 
-      // Set data first
       setEntryData(parsedData);
 
-      // Close AI dialog
       onOpenChange(false);
 
-      // Then open new entry dialog
       setShowDialog(true);
     } catch (err: any) {
       alert(`Error: ${err.message}`);
